@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+   <meta charset="UTF-8">
+   <title>Income manager</title>
+  </head>
+  <body>
+    <h1>Hello! This is simple income manager</h1>
+    <form method="get" action="/">
+      <label for="from">From: </label>
+      <input type="datetime-local" name="from">
+      <br>
+      <label for="to">To: </label>
+      <input type="datetime-local" name="to">
+      <br>
+      <input type="submit" value="Get!">
+    </form>
+
+    <h1>Your total income for  this period is {{total_income}}</h1>
+
+    <p>You can add your income here:</p>
+    <form method="post" action="/">
+      <label for="name">Income name: </label>
+      <input type="text" name="name">
+      <br>
+      <label for="value">Value: </label>
+      <input type="int" name="value">
+      <br>
+      <label for="event_at">Event at: </label>
+      <input type="datetime-local" name="event_at", min="2001-01-01T00:00", max="2200-12-31T23:59">
+      <br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
