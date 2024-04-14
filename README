@@ -28,3 +28,24 @@
 
 Остановить контейнеры и почистить вольюмы:
 `docker compose down -v`
+
+
+
+## Использование k8s с minikube
+
+* Собрать образы
+`(eval $(minikube docker-env) &&  docker compose build)`
+
+* Запустить
+`kubectl apply -f ./k8s/env-dev-configmap.yaml,./k8s/postgres-data-persistentvolumeclaim.yaml,./k8s/db-service.yaml,./k8s/web-service.yaml,./k8s/db-deployment.yaml,./k8s/web-deployment.yaml`
+
+* Ждем пока все поды поднимутся (должен быть статус RUNNING)
+`kubectl get pods -w`
+
+* Настраиваем port-forward для доступа до сервиса
+`kubectl port-forward --address 0.0.0.0 $(echo $(echo $(kubectl get pods -A | grep web) | cut -d ' ' -f 2)) 30007:5000`
+
+* Теперь к приложению есть доступ из браузера по ссылке http://localhost:30007/
+
+* Чтобы удалить поды
+`kubectl delete -f ./k8s/env-dev-configmap.yaml,./k8s/postgres-data-persistentvolumeclaim.yaml,./k8s/db-service.yaml,./k8s/web-service.yaml,./k8s/db-deployment.yaml,./k8s/web-deployment.yaml`

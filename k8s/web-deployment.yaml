@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.service: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.service: web
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.network/webserver-default: "true"
+        app.service: web
+    spec:
+      containers:
+        - args:
+            - python
+            - manage.py
+            - run
+            - -h
+            - 0.0.0.0
+          env:
+            - name: APP_FOLDER
+              valueFrom:
+                configMapKeyRef:
+                  key: APP_FOLDER
+                  name: env-dev
+            - name: DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE
+                  name: env-dev
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  key: DATABASE_URL
+                  name: env-dev
+            - name: FLASK_APP
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_APP
+                  name: env-dev
+            - name: FLASK_DEBUG
+              valueFrom:
+                configMapKeyRef:
+                  key: FLASK_DEBUG
+                  name: env-dev
+            - name: SQL_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_HOST
+                  name: env-dev
+            - name: SQL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: SQL_PORT
+                  name: env-dev
+          image: webserver-web
+          imagePullPolicy: Never
+          name: webserver-web
+          ports:
+            - containerPort: 30007
+              protocol: TCP
+      restartPolicy: Always

@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  APP_FOLDER: /usr/src/app
+  DATABASE: postgres
+  DATABASE_URL: postgresql://dima:dima@db:5432/incomes
+  FLASK_APP: project/__init__.py
+  FLASK_DEBUG: "1"
+  SQL_HOST: db
+  SQL_PORT: "5432"
+kind: ConfigMap
+metadata:
+  labels:
+    app.service: web-env
+  name: env-dev
