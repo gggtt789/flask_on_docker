@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.db: db
+  name: db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.db: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app.network/webserver-default: "true"
+        app.db: db
+    spec:
+      containers:
+        - env:
+            - name: POSTGRES_DB
+              value: incomes
+            - name: POSTGRES_PASSWORD
+              value: dima
+            - name: POSTGRES_USER
+              value: dima
+          image: postgres
+          name: db
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-data
+      restartPolicy: Always
+      volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-data
